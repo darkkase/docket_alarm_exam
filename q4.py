@@ -58,7 +58,6 @@ if __name__ == '__main__':
     url = 'https://eapps.courts.state.va.us/cav-public/caseInquiry/showCasePublicInquiry?caseId='
     list_data = []
     for caseId in xrange(23800, 23851):
-        print(caseId)
         response = requests.get(url + str(caseId))
         soup = response.soup
         appellants = soup.find(id='listAllPartiesAPL')
@@ -72,6 +71,5 @@ if __name__ == '__main__':
             'date_received': cav_received,
         }
         list_data.append(data)
-        print(list_data)
         sleep(0.5)  # the server looks really old, i don't want to saturate it
     save_json(list_data, 'q4')
