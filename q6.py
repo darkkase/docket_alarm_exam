@@ -36,8 +36,6 @@ def table_to_json(table):
     '''
     fist create a list of rows, and then convert the list in to a dict (using zip function), where the first row are the keys
     '''
-    print(table)
-    print(table('tr'))
     data_as_list = [[extract_col_content(col) for col in row("td")] for row in table("tr")]
     data = [dict(zip(data_as_list[0], items)) for items in data_as_list[1:]]
     return data
@@ -48,12 +46,26 @@ def save_json(j, file):
         json.dump(j, f)
 
 
+def ugly_patch_fix(row):
+    '''
+        if the problem is extract the data, and the html is not important, the we only need to fix the rows with the problem
+    '''
+    if '<td>' in row[:4] and '</td>' not in row:
+        soup = BeautifulSoup(row, 'html.parser')  # Purge all html unclosed tags
+        return '<td>' + soup.prettify() + '</td>'  # add td and /td and for the magic of the html.parser, this going to work
+    return row
+
+
 # main script
 if __name__ == '__main__':
     for file in ['q6-1', 'q6-2', 'q6-3']:
         with open(file + '.html', 'r') as f:
-            html = f.read()
-        soup = BeautifulSoup(html, "lxml")
+            html = f.readlines()
+        html2 = ''
+        for row in html:
+            html2 += ugly_patch_fix(row)
+        print html2
+        soup = BeautifulSoup(html2, "html.parser")
         table = soup.center.findChildren('table', recursive=False)[1]
         j = table_to_json(table)
         save_json(j, file)
