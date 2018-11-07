@@ -93,3 +93,28 @@ for x in custom_range(1, 1001):
         print x, 'Alarm'
     else:
         print x
+
+
+'''
+----------------------
+custom generator with yield keyword
+'''
+
+
+def yield_generator(x, y, z=1):
+    # return 0,1,2,...,n-1
+    while x < y:
+        yield x
+        x += z
+
+
+print('\n\n1 to 1000 with yield_generator\n\n')
+for x in yield_generator(1, 1001):
+    if (x % 7 == 0) and (x % 6 == 0):
+        print x, 'Docket Alarm'
+    elif x % 7 == 0:
+        print x, 'Docket'
+    elif x % 6 == 0:
+        print x, 'Alarm'
+    else:
+        print x

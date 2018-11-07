@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import urllib2
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 import json
 from time import sleep
 '''
@@ -28,7 +28,7 @@ class Response(object):
     @property
     def soup(self):
         '''return  the beautifulsoup object'''
-        return BeautifulSoup(self.text)
+        return BeautifulSoup(self.text, 'html.parser')
 
 
 class requests(object):
@@ -61,9 +61,9 @@ if __name__ == '__main__':
         response = requests.get(url + str(caseId))
         soup = response.soup
         appellants = soup.find(id='listAllPartiesAPL')
-        appellant_names = [item('td')[0].text for item in appellants('tr')]  # i assume that could be more than one appellant
-        cav_record_number = soup.find('input', {'name': 'caseNumber'}).get('value')
-        cav_received = soup.find('input', {'name': 'noticeOfAplDt'}).get('value')
+        appellant_names = [item('td')[0].text.strip() for item in appellants('tr')]  # i assume that could be more than one appellant
+        cav_record_number = soup.find('input', {'name': 'caseNumber'}).get('value').strip()
+        cav_received = soup.find('input', {'name': 'noticeOfAplDt'}).get('value').strip()
         data = {
             'caseId': caseId,
             'appellants': appellant_names,

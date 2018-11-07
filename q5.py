@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 import urllib2
 from urllib import urlencode
-from BeautifulSoup import BeautifulSoup
-
+# from bs4 import BeautifulSoup  # this dosent really used
 '''
 a. Create a program that downloads the page located here and saves it to the file q5-1.html.
 b. Then have the program click the checkbox, and select continue, download the resulting case
@@ -26,10 +25,11 @@ class Response(object):
         ''' return the html of the text '''
         return self.response.read()
 
-    @property
-    def soup(self):
-        '''return  the beautifulsoup object'''
-        return BeautifulSoup(self.text)
+    # this dosent really used
+    # @property
+    # def soup(self):
+    #     '''return  the beautifulsoup object'''
+    #     return BeautifulSoup(self.text, 'html.parser')
 
 
 class requests(object):
@@ -58,6 +58,6 @@ if __name__ == '__main__':
     url = 'http://casesearch.courts.state.md.us/casesearch/'
     response = requests.get(url)
     save_html(response.text, 'q5-1.html')
-    soup = response.soup
+    # soup = response.soup  # this dosent really used
     response = requests.post(url + 'processDisclaimer.jis', {'disclaimer': 'Y'})
     save_html(response.text, 'q5-2.html')
